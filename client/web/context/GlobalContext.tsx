@@ -1,3 +1,4 @@
 import { createContext } from "react";
+import { GlobalContextValue } from "./context";
 
-const GlobalState = createContext({});
+export const GlobalContext = createContext<Partial<GlobalContextValue>>({});
