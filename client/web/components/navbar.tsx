@@ -1,4 +1,5 @@
 import { GlobalContext } from "@/context/GlobalContext";
+import Link from "next/link";
 import React, { useContext } from "react";
 
 export const Navbar = () => {
@@ -9,27 +10,30 @@ export const Navbar = () => {
         Kaizen<span className="text-custom-blue">Klass</span>
       </div>
       <div className="nav-links flex text-[25px] items-center text-white w-[400px] space-x-[25px] mt-2">
-        <div
+        <Link
+          href={"/"}
           className={`font-base ${
             currentPage === "home" && "text-custom-blue"
           }`}
         >
           Home
-        </div>
-        <div
+        </Link>
+        <Link
+          href={"/"}
           className={`font-base ${
             currentPage === "classwork" && "text-custom-blue"
           }`}
         >
           Classwork
-        </div>
-        <div
+        </Link>
+        <Link
+          href={"/"}
           className={`font-base ${
             currentPage === "contribute" && "text-custom-blue"
           }`}
         >
           Contribute
-        </div>
+        </Link>
       </div>
     </div>
   );

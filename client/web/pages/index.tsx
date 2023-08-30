@@ -22,7 +22,7 @@ const index = () => {
             consistently
           </p>
           <div className="buttons justify-between items-center flex w-[380px]">
-            <div className="flex justify-between px-[30px] items-center font-base border border-custom-blue rounded-full w-[177px] h-[53px] text-[30px] text-custom-blue">
+            <div className="flex justify-between px-[30px] items-center font-base border cursor-pointer border-custom-blue rounded-full w-[177px] h-[53px] text-[30px] text-custom-blue">
               <Image
                 src={"/assets/Group.png"}
                 alt="whatsapp"
@@ -30,9 +30,9 @@ const index = () => {
                 height={35}
                 className="mb-1"
               />
-              <p>Klub</p>
+              <p className="font-base font-light">Klub</p>
             </div>
-            <div className="flex justify-between px-[25px] py-2 items-center font-base bg-custom-blue rounded-full w-[177px] h-[53px] text-[30px] text-white">
+            <div className="flex justify-between px-[25px] py-2 items-center cursor-pointer font-base bg-custom-blue rounded-full w-[177px] h-[53px] text-[30px] text-white">
               <Image
                 src={"/assets/gh.png"}
                 alt="whatsapp"
@@ -40,7 +40,7 @@ const index = () => {
                 height={40}
                 className="mb-1"
               />
-              <p>Klass</p>
+              <p className="font-base font-light">Klass</p>
             </div>
           </div>
         </div>
