@@ -2,10 +2,18 @@ import { GlobalContext } from "@/context/GlobalContext";
 import Link from "next/link";
 import React, { useContext } from "react";
 
-export const Navbar = () => {
+interface navbarProps {
+  bordered?: boolean;
+}
+
+export const Navbar = (props: navbarProps) => {
   const { currentPage } = useContext(GlobalContext);
   return (
-    <div className="flex justify-between items-center px-[140px] py-[10px]">
+    <div
+      className={`flex justify-between items-center px-[140px] py-[10px] ${
+        props.bordered ? "border border-custom-blue" : ""
+      }`}
+    >
       <div className="font-display text-white text-[40px]">
         Kaizen<span className="text-custom-blue">Klass</span>
       </div>
@@ -19,7 +27,7 @@ export const Navbar = () => {
           Home
         </Link>
         <Link
-          href={"/"}
+          href={"/assignments"}
           className={`font-base ${
             currentPage === "classwork" && "text-custom-blue"
           }`}
