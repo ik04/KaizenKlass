@@ -11,7 +11,7 @@ export const Navbar = (props: navbarProps) => {
   return (
     <div
       className={`flex justify-between items-center px-[140px] py-[10px] ${
-        props.bordered ? "border border-custom-blue" : ""
+        props.bordered ? "border-2 border-[#275464]" : ""
       }`}
     >
       <div className="font-display text-white text-[40px]">

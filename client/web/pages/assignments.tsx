@@ -5,7 +5,7 @@ import React, { useContext } from "react";
 const assignments = () => {
   const { updateCurrentPage } = useContext(GlobalContext);
   if (updateCurrentPage) {
-    updateCurrentPage("home");
+    updateCurrentPage("classwork");
   }
   return (
     <div className="h-screen bg-primary">

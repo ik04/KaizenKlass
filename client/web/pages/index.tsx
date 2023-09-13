@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/Navbar";
 import { GlobalContext } from "@/context/GlobalContext";
 import Image from "next/image";
 import HeroSvg from "../public/assets/heroimg.svg";
