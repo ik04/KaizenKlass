@@ -10,12 +10,11 @@ class Assignment extends Model
     use HasFactory;
     protected $fillable = [
         "title",
-        "subject",
-        "assignment_uuid",
         "description",
+        "subject_id",
+        "assignment_uuid",
         "link",
         "content",
-        "solution"
     ];
 }
  

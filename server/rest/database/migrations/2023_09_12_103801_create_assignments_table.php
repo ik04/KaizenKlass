@@ -17,11 +17,9 @@ return new class extends Migration
             $table->string("desription");
             $table->string("content")->nullable();
             $table->unsignedBigInteger("subject_id");
-            $table->string("link")->nullable();
+            $table->string("link")->nullable(); // how to auto detect links through regex or something else in the future
             $table->uuid("assignment_uuid")->unique();
-            $table->unsignedBigInteger("solution_id")->nullable();
             $table->foreign("subject_id")->references('id')->on('subjects')->onDelete('cascade');
-            $table->foreign("solution_id")->references('id')->on('solutions')->onDelete('cascade');
             $table->timestamps();
         });
     }

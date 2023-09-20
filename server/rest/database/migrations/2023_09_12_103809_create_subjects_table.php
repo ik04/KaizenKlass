@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("subject");
             $table->uuid("subject_uuid")->unique();
+            // todo: add year field, first add a field for years (feature creep)
             $table->timestamps();
         });
     }
