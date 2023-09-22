@@ -13,19 +13,23 @@ use Ramsey\Uuid\Uuid;
 class AssignmentController extends Controller
 {
     public function getSubjectId($subjectUuid){
-        $actualCategoryId = Subject::select("id")->where("category_uuid", $subjectUuid)->first("id")->id;
+        $actualCategoryId = Subject::select("id")->where("subject_uuid", $subjectUuid)->first("id")->id;
         return $actualCategoryId;
 
+    }
+    public function getAssignments(Request $request){
+        // only for dev
+        $assignments = Assignment::all();
+        return response()->json(["assignments" => $assignments],200);
     }
     public function addAssignment(Request $request){
         //  * 7 fields
         $validation = Validator::make($request->all(),[
             "title" => "required|string",
             "subject_uuid" => "required|uuid",
-            "description" => "required|string",
+            "description" => "string|nullable",
             "link"=>"string|nullable",
-            "content"=>"string|nullable"
-        ]);
+            "content" => "file|mimetypes:application/pdf,text/plain,image/jpeg,image/jpg,image/png|nullable",]);
         if($validation->fails()){
             return response()->json($validation->errors()->all(),400);
         }
@@ -39,7 +43,7 @@ class AssignmentController extends Controller
                 $content = $request->file('content');
                 $content_name = time().'.'.$content->getClientOriginalExtension();
                 Storage::disk('public')->put("/assignment_content/".$content_name,file_get_contents($content));
-                $url = Storage::url("items/".$content_name);
+                $url = Storage::url("assignment_content/".$content_name);
             }catch(Exception $e){ 
                return $e->getMessage();
             }

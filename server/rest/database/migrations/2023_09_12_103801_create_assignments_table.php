@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->id();
             $table->string("title");
-            $table->string("desription");
+            $table->string("description")->nullable();
             $table->string("content")->nullable();
             $table->unsignedBigInteger("subject_id");
             $table->string("link")->nullable(); // how to auto detect links through regex or something else in the future

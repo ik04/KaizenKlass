@@ -11,6 +11,8 @@ class Solution extends Model
     protected $fillable = [
         "content",
         "solution_uuid",
-        "assignment_id"
+        "assignment_id",
+        "description",
+        "user_id"
     ];
 }

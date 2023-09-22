@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Models\Subject;
@@ -18,7 +19,9 @@ use Ramsey\Uuid\Uuid;
 |
 */
 Route::prefix("v1")->group(function(){
-    
+    Route::get("/healthcheck",function(){
+        return response()->json(["message" => "Hi from KaizenKlass ~Ishaan Khurana"]);
+    });
     Route::post("register-admin",[UserController::class,"registerAdmin"]);
     Route::post("register-contributor",[UserController::class,"registerContributor"]);
     Route::post("register-crosschecker",[UserController::class,"registerCrosschecker"]);
@@ -31,6 +34,8 @@ Route::prefix("v1")->group(function(){
     });
 
     Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
+        Route::post("add-assignment",[AssignmentController::class,"addAssignment"]);
+        Route::get("get-assignments",[AssignmentController::class,"getAssignments"]);
         Route::post("add-subject",[SubjectController::class,"addSubject"]);
         Route::get("/_dbinit",function(){
             $relativePath = __DIR__ . "/init/subjects.json";
