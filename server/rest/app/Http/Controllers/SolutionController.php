@@ -13,10 +13,8 @@ class SolutionController extends Controller
             "assignment_uuid" => "uuid|required",
             "description" => "string|nullable"
         ]);
-        if($validation->fails()){
             if($validation->fails()){
                 return response()->json($validation->errors()->all(),400);
             }
-        }
     }
 }

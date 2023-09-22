@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string("content");
             $table->uuid("solution_uuid")->unique();
-            $table->unsignedBigInteger("poster_id");
+            $table->unsignedBigInteger("user_id");
             $table->unsignedBigInteger("assignment_id");
-            $table->foreign("poster_id")->references("id")->on('users')->onDelete("cascade");
-            $table->foreign("poster_id")->references("id")->on('assignments')->onDelete("cascade");
+            $table->foreign("user_id")->references("id")->on('users')->onDelete("cascade");
+            $table->foreign("assignment_id")->references("id")->on('assignments')->onDelete("cascade");
             $table->timestamps();
         });
     }
