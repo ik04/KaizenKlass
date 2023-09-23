@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\SolutionController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
 use App\Models\Subject;
@@ -31,12 +32,24 @@ Route::prefix("v1")->group(function(){
 
     Route::middleware(["auth:sanctum"])->group(function(){
         Route::post("logout",[UserController::class,"logout"]);
+        Route::post("add-solution",[SolutionController::class,"addSolution"]);
+        Route::delete("delete-own-account/{userUuid}", [UserController::class, "deleteOwnAccount"]);
+        Route::delete("delete-own-solution/{solutionUuid}", [SolutionController::class, "deleteOwnSolution"]);
+        Route::put("update-own-solution/{solutionUuid}", [SolutionController::class, "updateOwnSolution"]);
     });
 
+    Route::middleware(["auth:sanctum","checkCrosschecker"])->group(function(){
+        Route::put("edit-assignment/{assignmentUuid}", [AssignmentController::class, "editAssignment"]);
+        Route::put("update-solution/{solutionUuid}", [SolutionController::class, "updateSolution"]);
+        Route::delete("delete-solution/{solutionUuid}", [SolutionController::class, "deleteSolution"]);
+    });
+    
     Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
+        Route::delete("delete-assignment/{assignmentUuid}", [AssignmentController::class, "deleteAssignment"]);
         Route::post("add-assignment",[AssignmentController::class,"addAssignment"]);
         Route::get("get-assignments",[AssignmentController::class,"getAssignments"]);
         Route::post("add-subject",[SubjectController::class,"addSubject"]);
+        Route::delete("delete-subject/{subjectUuid}", [SubjectController::class, "deleteSubject"]);
         Route::get("/_dbinit",function(){
             $relativePath = __DIR__ . "/init/subjects.json";
             $subjects = file_get_contents($relativePath);

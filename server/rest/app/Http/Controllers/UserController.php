@@ -32,7 +32,7 @@ class UserController extends Controller
         $user->id = null;
         return response()->json(["user"=>$user],201);
     }
-    public function registerContributer(Request $request){
+    public function registerContributor(Request $request){
         $validation = Validator::make($request->all(),[
             "email" => "required|email|unique:users", // todo: add regex
             "name" => "required|string",
@@ -127,4 +127,43 @@ class UserController extends Controller
             'access_token' => $request -> cookie('at'),
         ],200);
     }
+    public function deleteUser($userUuid)
+{
+    $user = User::where('user_uuid', $userUuid)->first();
+
+    if (!$user) {
+        return response()->json(["error" => "User not found"], 404);
+    }
+
+    $user->delete();
+
+    return response()->json(["message" => "User deleted successfully"], 200);
+}
+
+public function updateUser(Request $request, $userUuid)
+{
+    
+    $user = User::where('user_uuid', $userUuid)->first();
+
+    if (!$user) {
+        return response()->json(["error" => "User not found"], 404);
+    }
+
+    $user->save();
+
+    return response()->json(["user" => $user], 200);
+}
+
+public function deleteOwnAccount(Request $request, $userUuid)
+{
+    if ($userUuid !== $request->user()->user_uuid) {
+        return response()->json(["error" => "Unauthorized"], 401);
+    }
+
+    // Delete the authenticated user's account
+    $request->user()->delete();
+
+    return response()->json(["message" => "Account deleted successfully"], 200);
+}
+
 }

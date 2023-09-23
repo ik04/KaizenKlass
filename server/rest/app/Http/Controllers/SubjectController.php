@@ -27,4 +27,16 @@ class SubjectController extends Controller
         $subjects = Subject::select("subject","subject_uuid")->get();
         return response()->json(["subjects"=>$subjects],200);
     }
+
+    public function deleteSubject($subjectUuid)
+    {
+        if (Subject::where('subject_uuid', $subjectUuid)->exists()) {
+            Subject::where('subject_uuid', $subjectUuid)->delete();
+    
+            return response()->json(["message" => "Subject deleted successfully"], 200);
+        }
+    
+        return response()->json(["error" => "Subject not found"], 404);
+    }
+
 }
