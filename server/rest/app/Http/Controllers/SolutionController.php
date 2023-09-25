@@ -149,8 +149,6 @@ public function deleteOwnSolution(Request $request, $solutionUuid)
         }
     }
     $solution->delete();
-
     return response()->json(["message" => "Solution deleted successfully"], 200);
 }
-
 }

@@ -29,7 +29,10 @@ Route::prefix("v1")->group(function(){
     Route::post("login",[UserController::class,"login"]);
     Route::get("user-data",[UserController::class,"userData"]); // No regular users
     Route::get("get-subjects",[SubjectController::class,"getSubjects"]);
+    Route::get("get-subject-assignments/{subjectUuid}",[SubjectController::class,"getAssignmentsBySubject"]);
+    Route::get("get-assignment-solutions/{assignmentUuid}",[AssignmentController::class,"getSolutionsByAssignment"]);
 
+    // * contributor routes
     Route::middleware(["auth:sanctum"])->group(function(){
         Route::post("logout",[UserController::class,"logout"]);
         Route::post("add-solution",[SolutionController::class,"addSolution"]);
@@ -37,13 +40,15 @@ Route::prefix("v1")->group(function(){
         Route::delete("delete-own-solution/{solutionUuid}", [SolutionController::class, "deleteOwnSolution"]);
         Route::put("update-own-solution/{solutionUuid}", [SolutionController::class, "updateOwnSolution"]);
     });
-
+    
+    // * crosschecker routes
     Route::middleware(["auth:sanctum","checkCrosschecker"])->group(function(){
         Route::put("edit-assignment/{assignmentUuid}", [AssignmentController::class, "editAssignment"]);
         Route::put("update-solution/{solutionUuid}", [SolutionController::class, "updateSolution"]);
         Route::delete("delete-solution/{solutionUuid}", [SolutionController::class, "deleteSolution"]);
     });
     
+    // * admin routes
     Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
         Route::delete("delete-assignment/{assignmentUuid}", [AssignmentController::class, "deleteAssignment"]);
         Route::post("add-assignment",[AssignmentController::class,"addAssignment"]);

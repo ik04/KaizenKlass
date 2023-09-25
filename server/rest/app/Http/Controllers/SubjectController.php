@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assignment;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,6 +11,11 @@ use Ramsey\Uuid\Uuid;
 class SubjectController extends Controller
 {
     // adding a year field to differ btw subjects and then a class field to differ btw assignments
+    public function getSubjectId($subjectUuid){
+        $actualSubjectId = Subject::select("id")->where("subject_uuid",$subjectUuid)->first("id")->id;
+        return $actualSubjectId;
+
+    }
     public function addSubject(Request $request){
         $validation = Validator::make($request->all(),[
             "subject" => "required|string"
@@ -37,6 +43,18 @@ class SubjectController extends Controller
         }
     
         return response()->json(["error" => "Subject not found"], 404);
+    }
+
+    public function getAssignmentsBySubject(Request $request, $subjectUuid){
+
+        $subject = Subject::where('subject_uuid', $subjectUuid)->first();
+
+    if (!$subject) {
+        return response()->json(["error" => "Subject not found"], 404);
+    }
+    $subjectId = $this->getSubjectId($subjectUuid);
+    $assignments = Assignment::select(["title","description","assignment_uuid","link","content",])->where("subject_id",$subjectId)->get();
+    return response()->json(["assignments"=>$assignments],200);
     }
 
 }
