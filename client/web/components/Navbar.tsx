@@ -9,11 +9,7 @@ interface navbarProps {
 export const Navbar = (props: navbarProps) => {
   const { currentPage } = useContext(GlobalContext);
   return (
-    <div
-      className={`flex justify-between items-center px-[140px] py-[10px] ${
-        props.bordered ? "border-2 border-[#275464]" : ""
-      }`}
-    >
+    <div className={`flex justify-between items-center px-[140px] py-[10px]`}>
       <div className="font-display text-white text-[40px]">
         Kaizen<span className="text-custom-blue">Klass</span>
       </div>

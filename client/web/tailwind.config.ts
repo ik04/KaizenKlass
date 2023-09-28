@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         primary: "#201f25",
         "custom-blue": "#4592AF",
+        "primary-complement": "#16151A",
       },
       fontFamily: {
         display: ['"Big Shoulders Display"', "sans"],
