@@ -20,9 +20,12 @@ const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
         <div
           className={`flex justify-between items-center px-[100px] py-[10px] bg-primary-complement`}
         >
-          <div className="font-display text-white text-[40px] mr-3">
+          <Link
+            href={"/"}
+            className="cursor-pointer font-display text-white text-[40px] mr-3"
+          >
             Kaizen<span className="text-custom-blue">Klass</span>
-          </div>
+          </Link>
           <div className="nav-links flex text-[25px] items-center text-white w-[400px] space-x-[25px] mt-2">
             <Link
               href={"/"}
