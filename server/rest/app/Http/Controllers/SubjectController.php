@@ -54,7 +54,7 @@ class SubjectController extends Controller
     }
     $subjectId = $this->getSubjectId($subjectUuid);
     $assignments = Assignment::select(["title","description","assignment_uuid","link","content",])->where("subject_id",$subjectId)->get();
-    return response()->json(["assignments"=>$assignments],200);
+    return response()->json(["assignments"=>$assignments,"subject"=>$subject["subject"]],200);
     }
 
 }

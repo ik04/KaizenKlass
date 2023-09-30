@@ -9,7 +9,7 @@ interface Subject {
   subject_uuid: string;
 }
 
-const assignments = () => {
+const subjects = () => {
   const { updateCurrentPage } = useContext(GlobalContext);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   if (updateCurrentPage) {
@@ -43,4 +43,4 @@ const assignments = () => {
   );
 };
 
-export default assignments;
+export default subjects;

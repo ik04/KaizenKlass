@@ -23,10 +23,11 @@ export const Navbar = (props: navbarProps) => {
           Home
         </Link>
         <Link
-          href={"/assignments"}
+          href={"/subjects"}
           className={`font-base ${
             currentPage === "classwork" && "text-custom-blue"
           }`}
+          // todo: link this to assignments first ?
         >
           Classwork
         </Link>
