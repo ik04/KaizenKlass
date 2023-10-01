@@ -18,21 +18,19 @@ class AssignmentController extends Controller
     public function getSubjectId($subjectUuid){
         $actualSubjectId = Subject::select("id")->where("subject_uuid", $subjectUuid)->first("id")->id;
         return $actualSubjectId;
-
     }
+
     public function getAssignmentId($assignmentUuid){
         $actualAssignmentId = Assignment::select("id")->where("assignment_uuid", $assignmentUuid)->first("id")->id;
         return $actualAssignmentId;
 
     }
 
-
     public function getAssignments(Request $request){
         // only for dev
         $assignments = Assignment::all();
         return response()->json(["assignments" => $assignments],200);
     }
-
 
     public function addAssignment(Request $request){
         //  * 7 fields
@@ -58,17 +56,35 @@ class AssignmentController extends Controller
             }catch(Exception $e){ 
                return $e->getMessage();
             }
+            $assignment = Assignment::create([
+                "title" => $validated["title"],
+                "description" => $validated["description"],
+                "subject_id" => $subjectId,
+                "assignment_uuid" => Uuid::uuid4(),
+                "content" => $url,
+                "link" => $validated["link"]
+            ]);
+            return response()->json(["assignment" => $assignment],201);
         }
 
+        if($request->has("link")){
+            $assignment = Assignment::create([
+                "title" => $validated["title"],
+                "description" => $validated["description"],
+                "subject_id" => $subjectId,
+                "assignment_uuid" => Uuid::uuid4(),
+                "link" => $validated["link"]
+            ]);
+            return response()->json(["assignment" => $assignment],201);
+        }
         $assignment = Assignment::create([
             "title" => $validated["title"],
             "description" => $validated["description"],
             "subject_id" => $subjectId,
             "assignment_uuid" => Uuid::uuid4(),
-            "content" => $url,
-            "link" => $validated["link"]
         ]);
         return response()->json(["assignment" => $assignment],201);
+
     }
 
 
@@ -156,5 +172,13 @@ public function getSolutionsByAssignment(Request $request,$assignmentUuid){
 
 
 }
+
+public function getAssignmentsWithSubjects(Request $request){
+$assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title","assignments.assignment_uuid","subjects.subject")->get();
+return response()->json(["assignments"=>$assignments],200);
+}
+
+
+
     
 }

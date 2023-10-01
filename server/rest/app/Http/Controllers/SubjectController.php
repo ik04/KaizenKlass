@@ -53,7 +53,7 @@ class SubjectController extends Controller
         return response()->json(["error" => "Subject not found"], 404);
     }
     $subjectId = $this->getSubjectId($subjectUuid);
-    $assignments = Assignment::select(["title","description","assignment_uuid","link","content",])->where("subject_id",$subjectId)->get();
+    $assignments = Assignment::select(["title","assignment_uuid"])->where("subject_id",$subjectId)->get();
     return response()->json(["assignments"=>$assignments,"subject"=>$subject["subject"]],200);
     }
 
