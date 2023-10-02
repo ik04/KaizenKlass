@@ -13,6 +13,7 @@ use Ramsey\Uuid\Uuid;
 
 
 // todo: exception handling
+// ! breaking change: adding content table in the future
 class AssignmentController extends Controller
 {
     public function getSubjectId($subjectUuid){
@@ -21,9 +22,19 @@ class AssignmentController extends Controller
     }
 
     public function getAssignmentId($assignmentUuid){
-        $actualAssignmentId = Assignment::select("id")->where("assignment_uuid", $assignmentUuid)->first("id")->id;
-        return $actualAssignmentId;
-
+        $validator = Validator::make(['uuid' => $assignmentUuid], [
+            'uuid' => 'required|uuid',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(["message" => "Invalid UUID"], 400);
+        }
+    
+        if(Assignment::where("assignment_uuid", $assignmentUuid)->first() == NULL){
+            return response()->json(["message" => "Assignment not found"],404);
+        }
+    
+        return Assignment::where("assignment_uuid", $assignmentUuid)->first()->id;
     }
 
     public function getAssignments(Request $request){
@@ -172,13 +183,19 @@ public function getSolutionsByAssignment(Request $request,$assignmentUuid){
 
 
 }
+// !integrate into one query is needed
+public function getAssignment(Request $request,$assignmentUuid){
+    $assignmentId = $this->getAssignmentId($assignmentUuid);
+    // todo: add check here
+    $assignmentDetails = Assignment::select("title","description","content","link","assignment_uuid")->where("id",$assignmentId)->first();
+    return response()->json(["assignment" => $assignmentDetails],200);
+}
+
 
 public function getAssignmentsWithSubjects(Request $request){
 $assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title","assignments.assignment_uuid","subjects.subject")->get();
 return response()->json(["assignments"=>$assignments],200);
 }
-
-
 
     
 }

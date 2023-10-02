@@ -1,10 +1,11 @@
+"use client";
 import React, { useContext } from "react";
-import { Navbar } from "@/components/Navbar";
-import { GlobalContext } from "@/context/GlobalContext";
+import { Navbar } from "../Navbar";
+import { GlobalContext } from "../../context/GlobalContext";
 import Image from "next/image";
-import HeroSvg from "../public/assets/heroimg.svg";
+import HeroSvg from "../../../../public/assets/heroimg.svg";
 
-const index = () => {
+const Landing = () => {
   const { updateCurrentPage } = useContext(GlobalContext);
   if (updateCurrentPage) {
     updateCurrentPage("home");
@@ -36,4 +37,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Landing;

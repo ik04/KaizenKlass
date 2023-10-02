@@ -32,6 +32,7 @@ Route::prefix("v1")->group(function(){
     Route::get("get-subject-assignments/{subjectUuid}",[SubjectController::class,"getAssignmentsBySubject"]); // used in subjects page
     Route::get("get-assignment-solutions/{assignmentUuid}",[AssignmentController::class,"getSolutionsByAssignment"]); // for each assignment
     Route::get("get-assignment-subjects",[AssignmentController::class,"getAssignmentsWithSubjects"]); // for assignments page
+    Route::get("get-assignment/{assignmentUuid}",[AssignmentController::class,"getAssignment"]); // for each assignment
 
     // * contributor routes
     Route::middleware(["auth:sanctum"])->group(function(){

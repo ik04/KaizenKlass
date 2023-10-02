@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { GlobalContextValue, GlobalStateProps } from "./context";
 import { GlobalContext } from "./GlobalContext";

@@ -1,6 +1,7 @@
-import PublicLayout from "@/components/PublicLayout";
-import { SubjectCard } from "@/components/SubjectCard";
-import { GlobalContext } from "@/context/GlobalContext";
+"use client";
+import PublicLayout from "../PublicLayout";
+import { SubjectCard } from "../SubjectCard";
+import { GlobalContext } from "../../context/GlobalContext";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 
@@ -9,7 +10,7 @@ interface Subject {
   subject_uuid: string;
 }
 
-const subjects = () => {
+const Subjects = () => {
   const { updateCurrentPage } = useContext(GlobalContext);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   if (updateCurrentPage) {
@@ -43,4 +44,4 @@ const subjects = () => {
   );
 };
 
-export default subjects;
+export default Subjects;

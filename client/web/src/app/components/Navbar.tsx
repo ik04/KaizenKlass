@@ -1,4 +1,4 @@
-import { GlobalContext } from "@/context/GlobalContext";
+import { GlobalContext } from "../context/GlobalContext";
 import Link from "next/link";
 import React, { useContext } from "react";
 
