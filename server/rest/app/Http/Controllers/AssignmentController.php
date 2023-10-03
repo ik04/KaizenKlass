@@ -22,23 +22,12 @@ class AssignmentController extends Controller
     }
 
     public function getAssignmentId($assignmentUuid){
-        $validator = Validator::make(['uuid' => $assignmentUuid], [
-            'uuid' => 'required|uuid',
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json(["message" => "Invalid UUID"], 400);
-        }
-    
-        if(Assignment::where("assignment_uuid", $assignmentUuid)->first() == NULL){
-            return response()->json(["message" => "Assignment not found"],404);
-        }
-    
-        return Assignment::where("assignment_uuid", $assignmentUuid)->first()->id;
+        $actualAssignmentId = Assignment::where("assignment_uuid", $assignmentUuid)->first()->id;
+        return $actualAssignmentId;
     }
 
     public function getAssignments(Request $request){
-        // only for dev
+        // * only for dev
         $assignments = Assignment::all();
         return response()->json(["assignments" => $assignments],200);
     }
@@ -56,6 +45,11 @@ class AssignmentController extends Controller
         }
 
         $validated = $validation->validated();
+
+        if (!Subject::where("subject_uuid", $validated["subject_uuid"])->exists()) {
+            return response()->json(["message" => "Subject not found"], 404);
+        }
+
         $subjectId = $this->getSubjectId($validated["subject_uuid"]);
 
         if($request->has('content')){
@@ -101,6 +95,14 @@ class AssignmentController extends Controller
 
     public function editAssignment(Request $request, $assignmentUuid)
 {
+    $validator = Validator::make(['uuid' => $assignmentUuid], [
+        'uuid' => 'required|uuid',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(["message" => "Invalid UUID"], 400);
+    }
+
     $validation = Validator::make($request->all(), [
         "title" => "string",
         "description" => "string|nullable",
@@ -110,6 +112,10 @@ class AssignmentController extends Controller
 
     if ($validation->fails()) { 
         return response()->json($validation->errors()->all(), 400);
+    }
+
+    if (!Assignment::where("assignment_uuid", $assignmentUuid)->exists()) {
+        return response()->json(["message" => "Assignment not found"], 404);
     }
 
     $assignmentId = $this->getAssignmentId($assignmentUuid);
@@ -154,7 +160,17 @@ class AssignmentController extends Controller
 
 public function deleteAssignment($assignmentUuid)
 {
+    $validator = Validator::make(['uuid' => $assignmentUuid], [
+        'uuid' => 'required|uuid',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(["message" => "Invalid UUID"], 400);
+    }
     // Get the assignment ID using the getAssignmentId function
+    if (!Assignment::where("assignment_uuid", $assignmentUuid)->exists()) {
+        return response()->json(["message" => "Assignment not found"], 404);
+    }
     $assignmentId = $this->getAssignmentId($assignmentUuid);
 
     // Find the assignment by its ID
@@ -178,19 +194,31 @@ public function deleteAssignment($assignmentUuid)
     return response()->json(["message" => "Assignment deleted successfully"], 200);
 }
 
+// ! integrate into one query if needed, 
+public function getAssignment($assignmentUuid){
+    $validator = Validator::make(['uuid' => $assignmentUuid], [
+        'uuid' => 'required|uuid',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(["message" => "Invalid UUID"], 400);
+    }
+
+    if (!Assignment::where("assignment_uuid", $assignmentUuid)->exists()) {
+        return response()->json(["message" => "Assignment not found"], 404);
+    }
+
+    $assignmentId = $this->getAssignmentId($assignmentUuid);
+
+    $assignmentDetails = Assignment::select("title","description","content","link","assignment_uuid")->where("id",$assignmentId)->first();
+    return response()->json(["assignment" => $assignmentDetails],200);
+}
+
 public function getSolutionsByAssignment(Request $request,$assignmentUuid){
     $assignmentId = $this->getAssignmentId($assignmentUuid);
 
 
 }
-// !integrate into one query is needed
-public function getAssignment(Request $request,$assignmentUuid){
-    $assignmentId = $this->getAssignmentId($assignmentUuid);
-    // todo: add check here
-    $assignmentDetails = Assignment::select("title","description","content","link","assignment_uuid")->where("id",$assignmentId)->first();
-    return response()->json(["assignment" => $assignmentDetails],200);
-}
-
 
 public function getAssignmentsWithSubjects(Request $request){
 $assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title","assignments.assignment_uuid","subjects.subject")->get();
