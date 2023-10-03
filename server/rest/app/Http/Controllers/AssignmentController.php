@@ -58,7 +58,7 @@ class AssignmentController extends Controller
                 $content_name = time().'.'.$content->getClientOriginalExtension();
                 Storage::disk('public')->put("/assignment_content/".$content_name,file_get_contents($content));
                 $url = Storage::url("assignment_content/".$content_name);
-            }catch(Exception $e){ 
+            }catch(Exception $e){
                return $e->getMessage();
             }
             $assignment = Assignment::create([
@@ -110,7 +110,7 @@ class AssignmentController extends Controller
         "content" => "file|mimetypes:application/pdf,text/plain,image/jpeg,image/jpg,image/png|nullable",
     ]);
 
-    if ($validation->fails()) { 
+    if ($validation->fails()) {
         return response()->json($validation->errors()->all(), 400);
     }
 
@@ -194,7 +194,7 @@ public function deleteAssignment($assignmentUuid)
     return response()->json(["message" => "Assignment deleted successfully"], 200);
 }
 
-// ! integrate into one query if needed, 
+// ! integrate into one query if needed,
 public function getAssignment($assignmentUuid){
     $validator = Validator::make(['uuid' => $assignmentUuid], [
         'uuid' => 'required|uuid',
@@ -215,9 +215,8 @@ public function getAssignment($assignmentUuid){
 }
 
 public function getSolutionsByAssignment(Request $request,$assignmentUuid){
-    $assignmentId = $this->getAssignmentId($assignmentUuid);
-
-
+    return Assignment::with(["solutions"])
+        ->where("assignment_uuid", $assignmentUuid)->first();
 }
 
 public function getAssignmentsWithSubjects(Request $request){
@@ -225,5 +224,5 @@ $assignments = Assignment::join("subjects","subjects.id","=","assignments.subjec
 return response()->json(["assignments"=>$assignments],200);
 }
 
-    
+
 }

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedBigInteger("subject_id");
             $table->string("link")->nullable(); // how to auto detect links through regex or something else in the future
             $table->uuid("assignment_uuid")->unique();
-            $table->foreign("subject_id")->references('id')->on('subjects')->onDelete('cascade');
             $table->timestamps();
         });
     }
