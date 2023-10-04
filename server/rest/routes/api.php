@@ -34,6 +34,7 @@ Route::prefix("v1")->group(function(){
     Route::get("get-assignment-solutions/{assignmentUuid}",[AssignmentController::class,"getSolutionsByAssignment"]); // for each assignment
     Route::get("get-assignment-subjects",[AssignmentController::class,"getAssignmentsWithSubjects"]); // for assignments page
     Route::get("get-assignments/{assignmentUuid}",[AssignmentController::class,"getAssignment"]); // for each assignment
+    Route::get("get-assignments",[AssignmentController::class,"getAssignments"]);
 
 
     // * contributor routes
@@ -56,7 +57,6 @@ Route::prefix("v1")->group(function(){
     Route::middleware(["auth:sanctum","checkAdmin"])->group(function(){
         Route::delete("delete-assignment/{assignmentUuid}", [AssignmentController::class, "deleteAssignment"]);
         Route::post("add-assignment",[AssignmentController::class,"addAssignment"]);
-        Route::get("get-assignments",[AssignmentController::class,"getAssignments"]);
         Route::post("add-subject",[SubjectController::class,"addSubject"]);
         Route::delete("delete-subject/{subjectUuid}", [SubjectController::class, "deleteSubject"]);
         Route::get("/_dbinit",function(){

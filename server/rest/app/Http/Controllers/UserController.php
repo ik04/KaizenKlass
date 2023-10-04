@@ -16,7 +16,7 @@ class UserController extends Controller
         $validation = Validator::make($request->all(),[
             "email" => "required|email|unique:users", // todo: add regex
             "name" => "required|string",
-            "password" =>"required|confirmed|string"
+            "password" =>"required|string"
         ]);
         if($validation->fails()){
             return response()->json($validation->errors()->all(),400);
@@ -36,7 +36,7 @@ class UserController extends Controller
         $validation = Validator::make($request->all(),[
             "email" => "required|email|unique:users", // todo: add regex
             "name" => "required|string",
-            "password" =>"required|confirmed|string"
+            "password" =>"required|string"
         ]);
         if($validation->fails()){
             return response()->json($validation->errors()->all(),400);
@@ -55,7 +55,7 @@ class UserController extends Controller
         $validation = Validator::make($request->all(),[
             "email" => "required|email|unique:users", // todo: add regex
             "name" => "required|string",
-            "password" =>"required|confirmed|string"
+            "password" =>"required|string"
         ]);
         if($validation->fails()){
             return response()->json($validation->errors()->all(),400);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Assignment;
 use App\Models\Subject;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -43,7 +44,6 @@ class AssignmentController extends Controller
         if($validation->fails()){
             return response()->json($validation->errors()->all(),400);
         }
-
         $validated = $validation->validated();
 
         if (!Subject::where("subject_uuid", $validated["subject_uuid"])->exists()) {
@@ -182,7 +182,7 @@ public function deleteAssignment($assignmentUuid)
 
     // Delete the assignment content file if it exists
     if (!empty($assignment->content)) {
-        $contentPath = public_path('assignment_content/' . basename($assignment->content));
+        $contentPath = public_path($assignment->content);
         if (File::exists($contentPath)) {
             File::delete($contentPath);
         }
@@ -236,6 +236,29 @@ public function getSolutionsByAssignment(Request $request, $assignmentUuid)
         }
     }
 
+    $solutionsData = [];
+    foreach ($assignment->solutions as $solution) {
+        $content = null;
+
+        if (!empty($solution->content)) {
+            $contentPath = public_path($solution->content);
+
+            if (File::exists($contentPath)) {
+                $fileContent = file_get_contents($contentPath);
+                $content = base64_encode($fileContent);
+            }
+        }
+
+        $username = User::select("name")->where("id",$solution->user_id)->first()->name;
+
+        $solutionsData[] = [
+            "description" => $solution->description,
+            "content" => $content, 
+            "solution_uuid" => $solution->solution_uuid,
+            "username" => $username
+        ];
+    }
+
     // Return the assignment details along with content as base64 encoded string
     return response()->json([
         "assignment" => [
@@ -245,15 +268,15 @@ public function getSolutionsByAssignment(Request $request, $assignmentUuid)
             "link" => $assignment->link,
             "assignment_uuid" => $assignment->assignment_uuid
         ],
-        "solutions" => $assignment->solutions
+        "solutions" => $solutionsData
     ], 200);
 }
+
 
 
 public function getAssignmentsWithSubjects(Request $request){
 $assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title","assignments.assignment_uuid","subjects.subject")->get();
 return response()->json(["assignments"=>$assignments],200);
 }
-
-
 }
+// todo: shift to service classes

@@ -7,6 +7,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { PacmanLoader } from "react-spinners";
 
+interface Solution {
+  description: string;
+  content: string;
+  username: string;
+}
+
 const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
   // optimize load times in the future and use the app router better
   const router = useRouter();
@@ -15,6 +21,7 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
   const [link, setLink] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
+  const [solutions, setSolutions] = useState<Solution[]>([]);
 
   const getAssignmentDetails = async () => {
     const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/get-assignment-solutions/${assignmentUuid}`;
@@ -24,10 +31,11 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
     setDescription(resp.data.assignment.description);
     setLink(resp.data.assignment.link);
     setContent(resp.data.assignment.content);
+    setSolutions(resp.data.solutions);
     setLoading(false);
   };
 
-  const handleAssignmentResponse = async (content: string) => {
+  const handleBase64Response = async (content: string) => {
     try {
       // Decode the base64 content
       // const decodedContent = atob(content);
@@ -99,22 +107,57 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                         </p>
                         {content != null && (
                           <button
-                            className="text-custom-blue cursor-pointer"
-                            onClick={() => handleAssignmentResponse(content)}
+                            className="text-custom-blue font-base text-2xl mt-2 hover:text-white duration-150 cursor-pointer"
+                            onClick={() => handleBase64Response(content)}
                           >
-                            Download Assignment File
+                            Download Assignment Pdf
                           </button>
                         )}
-                        {/* <a
-                          className="text-custom-blue"
-                          href={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}${content}`}
-                          download={"content.pdf"}
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          Download Assignment File
-                        </a> */}
                       </div>
                     )}
+                  </div>
+                </div>
+                <div className="solution-section flex flex-col items-center mt-10">
+                  <h2 className="w-[88%] font-base text-custom-blue text-5xl font-light my-2">
+                    Solutions:
+                  </h2>
+                  <div className="flex flex-col w-[88%] justify-between gap-5">
+                    {solutions.map((solution) => (
+                      <div className="bg-primary-complement p-3 flex flex-col">
+                        <div className="flex justify-between mb-2">
+                          <h1 className="text-custom-blue font-base text-3xl">
+                            Decription:
+                          </h1>
+                          <p className="text-custom-blue font-base text-2xl font-light posted-by">
+                            Posted by: {solution.username}
+                          </p>
+                        </div>
+                        {solution.description != null &&
+                        solution.description != undefined ? (
+                          <div className="font-base text-xl text-[#C3C3C3] mb-3">
+                            {solution.description}
+                          </div>
+                        ) : (
+                          <div>
+                            <p className="font-base text-2xl text-[#C3C3C3]">
+                              No Description Provided
+                            </p>
+                          </div>
+                        )}
+                        <div className="">
+                          {solution.content != null && (
+                            <button
+                              className="text-custom-blue text-left block font-base text-2xl hover:text-white duration-150 cursor-pointer"
+                              onClick={() =>
+                                handleBase64Response(solution.content)
+                              }
+                            >
+                              Download Solution Pdf
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

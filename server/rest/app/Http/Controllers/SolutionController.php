@@ -94,7 +94,7 @@ public function deleteSolution(Request $request, $solutionUuid)
     }
 
     if (!empty($solution->content)) {
-        $contentPath = public_path('solution_content/' . basename($solution->content));
+        $contentPath = public_path($solution->content);
         if (File::exists($contentPath)) {
             File::delete($contentPath);
         }
