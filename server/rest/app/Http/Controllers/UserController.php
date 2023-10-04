@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -26,10 +26,10 @@ class UserController extends Controller
             "email" => $validated["email"],
             "name" => $validated["name"],
             "password" => Hash::make($validated["password"]),
-            "user_uuid" => Uuid::uuid4(),
+            "user_uuid" => Str::uuid(),
             "role" => Role::ADMIN->value
         ]);
-        $user->id = null;
+        unset($user->id);
         return response()->json(["user"=>$user],201);
     }
     public function registerContributor(Request $request){
@@ -46,7 +46,7 @@ class UserController extends Controller
             "email" => $validated["email"],
             "name" => $validated["name"],
             "password" => Hash::make($validated["password"]),
-            "user_uuid" => Uuid::uuid4(),
+            "user_uuid" => Str::uuid(),
             "role" => Role::CONTRIBUTOR->value
         ]);
         return response()->json(["user"=>$user],201);
@@ -65,7 +65,7 @@ class UserController extends Controller
             "email" => $validated["email"],
             "name" => $validated["name"],
             "password" => Hash::make($validated["password"]),
-            "user_uuid" => Uuid::uuid4(),
+            "user_uuid" => Str::uuid(),
             "role" => Role::CROSSCHECKER->value
         ]);
         return response()->json(["user"=>$user],201);
@@ -142,7 +142,7 @@ class UserController extends Controller
 
 public function updateUser(Request $request, $userUuid)
 {
-    
+
     $user = User::where('user_uuid', $userUuid)->first();
 
     if (!$user) {
