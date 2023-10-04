@@ -249,13 +249,16 @@ public function getSolutionsByAssignment(Request $request, $assignmentUuid)
             }
         }
 
-        $username = User::select("name")->where("id",$solution->user_id)->first()->name;
+        $user = User::select("name")->where("id",$solution->user_id)->first();
+        $username = $user->name;
+        $userUuid = $user->user_uuid;
 
         $solutionsData[] = [
             "description" => $solution->description,
             "content" => $content, 
             "solution_uuid" => $solution->solution_uuid,
-            "username" => $username
+            "username" => $username,
+            "user_uuid" => $userUuid
         ];
     }
 

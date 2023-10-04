@@ -11,6 +11,7 @@ interface Solution {
   description: string;
   content: string;
   username: string;
+  user_uuid: string;
 }
 
 const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
