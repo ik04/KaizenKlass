@@ -107,7 +107,7 @@ class AssignmentController extends Controller
         "title" => "string",
         "description" => "string|nullable",
         "link" => "string|nullable",
-        "content" => "file|mimetypes:application/pdf,text/plain,image/jpeg,image/jpg,image/png|nullable",
+        "content" => "file|mimetypes:application/pdf|nullable",
     ]);
 
     if ($validation->fails()) { 
@@ -213,12 +213,42 @@ public function getAssignment($assignmentUuid){
     $assignmentDetails = Assignment::select("title","description","content","link","assignment_uuid")->where("id",$assignmentId)->first();
     return response()->json(["assignment" => $assignmentDetails],200);
 }
+public function getSolutionsByAssignment(Request $request, $assignmentUuid)
+{
+    $assignment = Assignment::with(["solutions"])
+        ->where("assignment_uuid", $assignmentUuid)
+        ->first();
 
-public function getSolutionsByAssignment(Request $request,$assignmentUuid){
-    $assignmentId = $this->getAssignmentId($assignmentUuid);
+    if (!$assignment) {
+        return response()->json(["message" => "Assignment not found"], 404);
+    }
 
+    $content = null;
+    if (!empty($assignment->content)) {
+        $contentPath = public_path($assignment->content);
 
+        if (File::exists($contentPath)) {
+             // Read the content of the file
+             $fileContent = file_get_contents($contentPath);
+
+             // Encode the content as base64
+             $content = base64_encode($fileContent);
+        }
+    }
+
+    // Return the assignment details along with content as base64 encoded string
+    return response()->json([
+        "assignment" => [
+            "title" => $assignment->title,
+            "description" => $assignment->description,
+            "content" => $content, // Content as base64 encoded string
+            "link" => $assignment->link,
+            "assignment_uuid" => $assignment->assignment_uuid
+        ],
+        "solutions" => $assignment->solutions
+    ], 200);
 }
+
 
 public function getAssignmentsWithSubjects(Request $request){
 $assignments = Assignment::join("subjects","subjects.id","=","assignments.subject_id")->select("assignments.title","assignments.assignment_uuid","subjects.subject")->get();

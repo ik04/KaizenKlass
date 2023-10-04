@@ -57,18 +57,25 @@ const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
       <div className="flex">
         <div className="flex text-white w-[400px]">
           <div className="bg-primary-complement fixed h-full w-[18%] flex items-center justify-center space-y-[14rem] flex-col">
-            <div className="flex items-center gap-5 hover:-translate-y-2 duration-300 ease-in-out transition cursor-pointer">
+            <Link
+              href={"/subjects"}
+              className="flex items-center gap-5 hover:-translate-y-2 duration-300 ease-in-out transition cursor-pointer"
+            >
               <Image src={Book} alt="book" width={45} height={45} />
-              <p className="text-2xl font-base">Assignment</p>
-            </div>
+
+              <p className="text-2xl font-base">Subjects</p>
+            </Link>
+            <Link
+              href={"/assignments"}
+              className="flex items-center gap-5 hover:-translate-y-2 duration-300 ease-in-out transition cursor-pointer"
+            >
+              <Image src={Past} alt="book" />
+              <p className="text-2xl font-base">Assignments</p>
+            </Link>
             <div className="flex items-center gap-5 hover:-translate-y-2 duration-300 ease-in-out transition cursor-pointer">
               <Image src={Test} alt="paper" />
 
               <p className="text-2xl font-base">Test Papers</p>
-            </div>
-            <div className="flex items-center gap-5 hover:-translate-y-2 duration-300 ease-in-out transition cursor-pointer">
-              <Image src={Past} alt="book" />
-              <p className="text-2xl font-base">Past Docs</p>
             </div>
           </div>
         </div>

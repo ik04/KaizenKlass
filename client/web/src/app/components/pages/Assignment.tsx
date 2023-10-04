@@ -17,7 +17,7 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
   const [loading, setLoading] = useState(true);
 
   const getAssignmentDetails = async () => {
-    const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/get-assignment/${assignmentUuid}`;
+    const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/get-assignment-solutions/${assignmentUuid}`;
     const resp = await axios.get(url);
     console.log(resp.data.assignment);
     setTitle(resp.data.assignment.title);
@@ -27,23 +27,22 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
     setLoading(false);
   };
 
-  const handleDownload = async () => {
+  const handleAssignmentResponse = async (content: string) => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}${content}`;
-      const resp = await axios.get(url, { responseType: "blob" });
+      // Decode the base64 content
+      // const decodedContent = atob(content);
 
-      const blob = new Blob([resp.data], {
-        type: resp.headers["content-type"],
-      });
+      // Create a Blob from the decoded content
+      // const blob = new Blob([decodedContent], { type: "application/pdf" });
 
+      // Create a link element and trigger a download
       const link = document.createElement("a");
-      link.href = window.URL.createObjectURL(blob);
-      link.download = "assignment_file.pdf";
-      document.body.appendChild(link);
+      link.href = `data:application/pdf;base64,${content}`;
+      link.download = `${assignmentUuid}.pdf`; // Set a meaningful filename
       link.click();
-      document.body.removeChild(link);
     } catch (error) {
-      console.error("Error downloading file:", error);
+      console.error("Error handling assignment response:", error);
+      // Handle the error or provide feedback to the user
     }
   };
 
@@ -98,12 +97,14 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                             {link}
                           </Link>
                         </p>
-                        <button
-                          className="text-custom-blue cursor-pointer"
-                          onClick={handleDownload}
-                        >
-                          Download Assignment File
-                        </button>
+                        {content != null && (
+                          <button
+                            className="text-custom-blue cursor-pointer"
+                            onClick={() => handleAssignmentResponse(content)}
+                          >
+                            Download Assignment File
+                          </button>
+                        )}
                         {/* <a
                           className="text-custom-blue"
                           href={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}${content}`}
