@@ -17,6 +17,10 @@ class Assignment extends Model
         "link",
         "content",
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany;
+     */
     public function solutions(): HasMany
     {
         return $this->hasMany(Solution::class);

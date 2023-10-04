@@ -58,7 +58,7 @@ class AssignmentController extends Controller
                 $content_name = time().'.'.$content->getClientOriginalExtension();
                 Storage::disk('public')->put("/assignment_content/".$content_name,file_get_contents($content));
                 $url = Storage::url("assignment_content/".$content_name);
-            }catch(Exception $e){ 
+            }catch(Exception $e){
                return $e->getMessage();
             }
             $assignment = Assignment::create([
@@ -110,7 +110,7 @@ class AssignmentController extends Controller
         "content" => "file|mimetypes:application/pdf|nullable",
     ]);
 
-    if ($validation->fails()) { 
+    if ($validation->fails()) {
         return response()->json($validation->errors()->all(), 400);
     }
 
@@ -194,7 +194,7 @@ public function deleteAssignment($assignmentUuid)
     return response()->json(["message" => "Assignment deleted successfully"], 200);
 }
 
-// ! integrate into one query if needed, 
+// ! integrate into one query if needed,
 public function getAssignment($assignmentUuid){
     $validator = Validator::make(['uuid' => $assignmentUuid], [
         'uuid' => 'required|uuid',
@@ -255,5 +255,5 @@ $assignments = Assignment::join("subjects","subjects.id","=","assignments.subjec
 return response()->json(["assignments"=>$assignments],200);
 }
 
-    
+
 }
