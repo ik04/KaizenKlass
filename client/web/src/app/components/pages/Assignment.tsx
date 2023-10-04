@@ -23,8 +23,30 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
     setTitle(resp.data.assignment.title);
     setDescription(resp.data.assignment.description);
     setLink(resp.data.assignment.link);
+    setContent(resp.data.assignment.content);
     setLoading(false);
   };
+
+  const handleDownload = async () => {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}${content}`;
+      const resp = await axios.get(url, { responseType: "blob" });
+
+      const blob = new Blob([resp.data], {
+        type: resp.headers["content-type"],
+      });
+
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.download = "assignment_file.pdf";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+
   useEffect(() => {
     getAssignmentDetails();
   }, [assignmentUuid]);
@@ -76,6 +98,20 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                             {link}
                           </Link>
                         </p>
+                        <button
+                          className="text-custom-blue cursor-pointer"
+                          onClick={handleDownload}
+                        >
+                          Download Assignment File
+                        </button>
+                        {/* <a
+                          className="text-custom-blue"
+                          href={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}${content}`}
+                          download={"content.pdf"}
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          Download Assignment File
+                        </a> */}
                       </div>
                     )}
                   </div>

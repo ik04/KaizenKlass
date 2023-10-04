@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\SolutionController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\UserController;
@@ -33,6 +34,7 @@ Route::prefix("v1")->group(function(){
     Route::get("get-assignment-solutions/{assignmentUuid}",[AssignmentController::class,"getSolutionsByAssignment"]); // for each assignment
     Route::get("get-assignment-subjects",[AssignmentController::class,"getAssignmentsWithSubjects"]); // for assignments page
     Route::get("get-assignments/{assignmentUuid}",[AssignmentController::class,"getAssignment"]); // for each assignment
+
 
     // * contributor routes
     Route::middleware(["auth:sanctum"])->group(function(){
