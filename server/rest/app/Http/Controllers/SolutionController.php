@@ -20,7 +20,7 @@ class SolutionController extends Controller
     }
     public function addSolution(Request $request){
         $validation = Validator::make($request->all(),[
-            "content" => "file|mimetypes:application/pdf,text/plain,image/jpeg,image/jpg,image/png|nullable",
+            "content" => "file|mimetypes:application/pdf|nullable",
             "assignment_uuid" => "uuid|required",
             "description" => "string|nullable"
         ]);

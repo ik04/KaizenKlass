@@ -223,7 +223,7 @@ public function getSolutionsByAssignment(Request $request, $assignmentUuid)
         return response()->json(["message" => "Assignment not found"], 404);
     }
 
-    $content = null;
+    $assignmentContent = null;
     if (!empty($assignment->content)) {
         $contentPath = public_path($assignment->content);
 
@@ -232,7 +232,7 @@ public function getSolutionsByAssignment(Request $request, $assignmentUuid)
              $fileContent = file_get_contents($contentPath);
 
              // Encode the content as base64
-             $content = base64_encode($fileContent);
+             $assignmentContent = base64_encode($fileContent);
         }
     }
 
@@ -267,7 +267,7 @@ public function getSolutionsByAssignment(Request $request, $assignmentUuid)
         "assignment" => [
             "title" => $assignment->title,
             "description" => $assignment->description,
-            "content" => $content, // Content as base64 encoded string
+            "content" => $assignmentContent, // Content as base64 encoded string
             "link" => $assignment->link,
             "assignment_uuid" => $assignment->assignment_uuid
         ],

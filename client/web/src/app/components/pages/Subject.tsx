@@ -1,9 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PublicLayout from "../../components/PublicLayout";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
+import { GlobalContext } from "@/app/context/GlobalContext";
+
 import { PacmanLoader } from "react-spinners";
 
 interface Assignment {
@@ -15,6 +17,10 @@ const Subject = ({ subjectUuid }: { subjectUuid: string }) => {
   const [subjectName, setSubjectName] = useState("");
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [loading, setLoading] = useState(true);
+  const { updateCurrentPage } = useContext(GlobalContext);
+  if (updateCurrentPage) {
+    updateCurrentPage("classwork");
+  }
 
   const getSubjectAssignments = async () => {
     try {

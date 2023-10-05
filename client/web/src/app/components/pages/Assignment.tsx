@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import PublicLayout from "../PublicLayout";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { PacmanLoader } from "react-spinners";
+import { GlobalContext } from "@/app/context/GlobalContext";
 
 interface Solution {
   description: string;
@@ -23,6 +24,11 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [solutions, setSolutions] = useState<Solution[]>([]);
+
+  const { updateCurrentPage } = useContext(GlobalContext);
+  if (updateCurrentPage) {
+    updateCurrentPage("classwork");
+  }
 
   const getAssignmentDetails = async () => {
     const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/get-assignment-solutions/${assignmentUuid}`;

@@ -12,9 +12,9 @@ interface Subject {
 }
 
 const Subjects = () => {
-  const { updateCurrentPage } = useContext(GlobalContext);
   const [loading, setLoading] = useState(true);
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const { updateCurrentPage } = useContext(GlobalContext);
   if (updateCurrentPage) {
     updateCurrentPage("classwork");
   }
