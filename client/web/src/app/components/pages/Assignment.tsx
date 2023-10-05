@@ -25,7 +25,8 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
   const [loading, setLoading] = useState(true);
   const [solutions, setSolutions] = useState<Solution[]>([]);
 
-  const { updateCurrentPage } = useContext(GlobalContext);
+  const { updateCurrentPage, userUuid, isAuthenticated, role } =
+    useContext(GlobalContext);
   if (updateCurrentPage) {
     updateCurrentPage("classwork");
   }
@@ -64,6 +65,17 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
   useEffect(() => {
     getAssignmentDetails();
   }, [assignmentUuid]);
+
+  const deleteAssignment = async () => {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/delete-assignment/${assignmentUuid}`;
+      const resp = await axios.delete(url, { withCredentials: true });
+      console.log(resp);
+      location.href = "/assignments";
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="h-screen bg-primary overflow-auto">
       <PublicLayout>
@@ -85,9 +97,21 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                 </div>
                 <div className="description-section flex justify-center">
                   <div className="w-[88%] bg-primary-complement p-3 flex flex-col">
-                    <h1 className="text-custom-blue font-base text-2xl mb-1">
-                      Decription:
-                    </h1>
+                    <div className="w-full flex justify-between">
+                      <h1 className="text-custom-blue font-base text-2xl mb-1">
+                        Decription:
+                      </h1>
+                      {isAuthenticated && role === 2 && (
+                        // todo: add are yousure modal
+                        <Image
+                          onClick={deleteAssignment}
+                          alt="delete"
+                          src={"/assets/redBin.png"}
+                          height={40}
+                          width={40}
+                        />
+                      )}
+                    </div>
                     {description != null && description != undefined ? (
                       <div className="font-base text-xl text-[#C3C3C3] mb-5">
                         {description}
@@ -135,9 +159,11 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                           <h1 className="text-custom-blue font-base text-3xl">
                             Decription:
                           </h1>
-                          <p className="text-custom-blue font-base text-2xl font-light posted-by">
-                            Posted by: {solution.username}
-                          </p>
+                          <div className="flex space-x-4">
+                            <p className="text-custom-blue font-base text-2xl font-light posted-by">
+                              Posted by: {solution.username}
+                            </p>
+                          </div>
                         </div>
                         {solution.description != null &&
                         solution.description != undefined ? (

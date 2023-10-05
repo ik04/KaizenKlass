@@ -5,4 +5,9 @@ export interface GlobalStateProps {
 export interface GlobalContextValue {
   currentPage: string;
   updateCurrentPage: (value: string) => void;
+  isAuthenticated: boolean;
+  email: string | null;
+  name: string | null;
+  role: number | null;
+  userUuid: string | null;
 }

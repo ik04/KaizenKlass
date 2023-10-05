@@ -6,10 +6,11 @@ import axios from "axios";
 
 export const GlobalState: React.FC<GlobalStateProps> = ({ children }) => {
   const [currentPage, setCurrentPage] = useState<string>("");
-  const [userUuid, setUserUuid] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [role, setRole] = useState<number>();
+  const [userUuid, setUserUuid] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
+  const [role, setRole] = useState<number | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const updateCurrentPage = (value: string) => {
     setCurrentPage(value);
   };
@@ -27,6 +28,7 @@ export const GlobalState: React.FC<GlobalStateProps> = ({ children }) => {
         setEmail(resp.data.email);
         setName(resp.data.name);
         setRole(resp.data.role);
+        setIsAuthenticated(true);
       } catch (error) {
         console.log(error);
       }
@@ -40,6 +42,7 @@ export const GlobalState: React.FC<GlobalStateProps> = ({ children }) => {
     email: email,
     name: name,
     role: role,
+    isAuthenticated: isAuthenticated,
   };
   return (
     <GlobalContext.Provider value={globalStateValue}>

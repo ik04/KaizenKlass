@@ -6,13 +6,27 @@ import Past from "../../../public/assets/article.svg";
 import Image from "next/image";
 import { GlobalContext } from "../context/GlobalContext";
 import Link from "next/link";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export interface LayoutProps {
   children: React.ReactNode;
 }
 
 const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
-  const { currentPage } = useContext(GlobalContext);
+  const { currentPage, isAuthenticated, name } = useContext(GlobalContext);
+
+  const logout = async () => {
+    try {
+      const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/logout`;
+      const resp = await axios.post(url, {}, { withCredentials: true });
+      console.log(resp);
+      toast.success("Logged out!");
+      location.href = "/assignments";
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="">
@@ -43,14 +57,38 @@ const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
             >
               Classwork
             </Link>
-            <Link
-              href={"/"}
-              className={`font-base ${
-                currentPage === "contribute" && "text-custom-blue"
-              }`}
-            >
-              Contribute
-            </Link>
+            {!isAuthenticated ? (
+              <>
+                <Link
+                  href={"/"}
+                  className={`font-base ${
+                    currentPage === "contribute" && "text-custom-blue"
+                  }`}
+                >
+                  Contribute
+                </Link>
+              </>
+            ) : (
+              <>
+                {" "}
+                <Link
+                  href={"/profile"}
+                  className={`font-base ${
+                    currentPage === "contribute" && "text-custom-blue"
+                  }`}
+                >
+                  {name}
+                </Link>
+              </>
+            )}
+            {isAuthenticated && (
+              <div
+                onClick={logout}
+                className={`font-base text-custom-blue hover:text-red-500 duration-200 cursor-pointer`}
+              >
+                logout
+              </div>
+            )}
           </div>
         </div>{" "}
       </div>
