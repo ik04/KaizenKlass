@@ -19,7 +19,7 @@ const Landing = () => {
             Elevate Your Efficiency
           </h1>
           <p className="font-base text-[35px] font-light text-custom-blue w-[420px] my-5">
-            combine you efforts and make work happend, beat class deadlines
+            combine your efforts and make work happend, beat class deadlines
             consistently
           </p>
           <div className="buttons justify-between items-center flex w-[380px]">

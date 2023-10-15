@@ -113,7 +113,7 @@ const PublicLayout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center gap-5 hover:-translate-y-2 duration-300 ease-in-out transition cursor-pointer">
               <Image src={Test} alt="paper" />
 
-              <p className="text-2xl font-base">Test Papers</p>
+              <p className="text-2xl font-base">Resources</p>
             </div>
           </div>
         </div>
