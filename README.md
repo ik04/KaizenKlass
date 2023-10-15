@@ -1,6 +1,7 @@
 # About The Project
 
-![[KK.png]]
+![KK](https://github.com/ik04/KaizenKlass/assets/63468587/261f80b0-2318-4c08-82a8-ae04a552a6f7)
+
 
 the Purpose of this project is to build a community of people who are willing to collaborate and help each other out with the ever pressing issue of assignments, for me personally i feel that i don't learn much from them and they pile up on me which does nothing to alleviate my stress,
 i have a few reasons as to why i am building this:
