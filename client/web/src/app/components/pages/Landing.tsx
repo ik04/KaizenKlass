@@ -4,6 +4,7 @@ import { Navbar } from "../Navbar";
 import { GlobalContext } from "../../context/GlobalContext";
 import Image from "next/image";
 import HeroSvg from "../../../../public/assets/heroimg.svg";
+import Link from "next/link";
 
 const Landing = () => {
   const { updateCurrentPage } = useContext(GlobalContext);
@@ -23,11 +24,15 @@ const Landing = () => {
             consistently
           </p>
           <div className="buttons justify-between items-center flex w-[380px]">
-            <div className="flex justify-center items-center font-base border cursor-pointer border-custom-blue rounded-full w-[177px] h-[53px] text-[30px] text-custom-blue">
-              <p className="font-base font-light">Contribute</p>
+            <div className="flex hover:-translate-y-2 duration-150 transition-all justify-center items-center font-base font-bold border cursor-pointer border-custom-blue rounded-full w-[177px] h-[53px] text-[30px] text-custom-blue">
+              <Link href={"/"} className="font-base font-light">
+                Contribute
+              </Link>
             </div>
-            <div className="flex justify-center py-2 items-center cursor-pointer font-base bg-custom-blue rounded-full w-[177px] h-[53px] text-[30px] text-white">
-              <p className="font-base font-light">Classwork</p>
+            <div className="flex hover:-translate-y-2 border-custom-blue duration-150 transition-all font-bold justify-center py-2 items-center cursor-pointer font-base bg-custom-blue rounded-full w-[177px] h-[53px] text-[30px] text-white">
+              <Link href={"/subjects"} className="font-base font-light">
+                Classwork
+              </Link>
             </div>
           </div>
         </div>
