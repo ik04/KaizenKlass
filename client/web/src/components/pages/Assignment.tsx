@@ -130,7 +130,6 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                         Decription:
                       </h1>
                       {isAuthenticated && role === 2 && (
-                        // todo: add are you sure modal
                         <Image
                           onClick={deleteAssignment}
                           alt="delete"
@@ -187,35 +186,35 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                           <h1 className="text-custom-blue font-base text-3xl">
                             Decription:
                           </h1>
-                          <div className="flex space-x-4">
-                            {userUuid != solution.user_uuid ? (
-                              <p className="text-custom-blue font-base text-2xl font-light posted-by">
-                                Posted by: {solution.username}
-                              </p>
+                          <div className="flex space-x-3 items-center">
+                            {userUuid !== solution.user_uuid ? (
+                              <>
+                                <p className="text-custom-blue font-base text-2xl font-light posted-by">
+                                  Posted by: {solution.username}
+                                </p>
+                                {(role === 2 || role === 1) && (
+                                  <>
+                                    {" "}
+                                    <Image
+                                      onClick={() =>
+                                        deleteSolution(solution.solution_uuid)
+                                      }
+                                      alt="delete"
+                                      src={"/assets/redBin.png"}
+                                      height={40}
+                                      width={40}
+                                    />
+                                  </>
+                                )}
+                              </>
                             ) : (
                               <>
-                                {" "}
                                 <Image
                                   onClick={() =>
                                     deleteOwnSolution(solution.solution_uuid)
                                   }
                                   alt="delete"
                                   src={"/assets/blueBin.png"}
-                                  height={40}
-                                  width={40}
-                                />
-                              </>
-                            )}
-                            {((userUuid != solution.user_uuid && role === 2) ||
-                              role === 1) && (
-                              <>
-                                {" "}
-                                <Image
-                                  onClick={() =>
-                                    deleteOwnSolution(solution.solution_uuid)
-                                  }
-                                  alt="delete"
-                                  src={"/assets/redBin.png"}
                                   height={40}
                                   width={40}
                                 />
