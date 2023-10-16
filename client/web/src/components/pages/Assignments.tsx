@@ -14,15 +14,41 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 interface Assignment {
   title: string;
   assignment_uuid: string;
   subject: string;
 }
+interface Subject {
+  subject: string;
+  subject_uuid: string;
+}
 
 const Assignments = () => {
   const [loading, setLoading] = useState(false);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+
+  const getSubjects = async () => {
+    const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/get-subjects`;
+    const resp = await axios.get(url);
+    console.log(resp.data.subjects);
+    setSubjects(resp.data.subjects);
+    setLoading(false);
+  };
 
   const getAssignmentsWithSubjects = async () => {
     try {
@@ -34,13 +60,14 @@ const Assignments = () => {
     }
   };
 
-  const { updateCurrentPage } = useContext(GlobalContext);
+  const { updateCurrentPage, role } = useContext(GlobalContext);
   if (updateCurrentPage) {
     updateCurrentPage("classwork");
   }
 
   useEffect(() => {
     getAssignmentsWithSubjects();
+    getSubjects();
   }, []);
 
   return (
@@ -77,33 +104,81 @@ const Assignments = () => {
                       </div>
                     </Link>
                   ))}
-                  <Dialog>
-                    <DialogTrigger>
-                      <div className="cursor-pointer h-[180px] bg-primary-complement text-custom-blue px-5 rounded-[20px] flex flex-col justify-center my-3 hover:text-white duration-300 transition-all">
-                        <div className="flex space-x-4 items-center w-full ">
-                          <h2 className="font-base text-[40px] font-light">
-                            Add New Assignment
-                          </h2>
-                          <Image
-                            src={"/assets/addButton.png"}
-                            alt="arrow"
-                            width={50}
-                            height={50}
-                          />
+                  {role === 2 && (
+                    <Dialog>
+                      <DialogTrigger>
+                        <div className="cursor-pointer h-[180px] bg-primary-complement text-custom-blue px-5 rounded-[20px] flex flex-col justify-center my-3 hover:text-white duration-300 transition-all">
+                          <div className="flex space-x-4 items-center w-full ">
+                            <h2 className="font-base text-[40px] font-light">
+                              Add New Assignment
+                            </h2>
+                            <Image
+                              src={"/assets/addButton.png"}
+                              alt="arrow"
+                              width={50}
+                              height={50}
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Add Assignment</DialogTitle>
-                        <DialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
-                        </DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="text-4xl font-light font-base">
+                            Add Assignment
+                          </DialogTitle>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label
+                                htmlFor="title"
+                                className="text-right text-gray-400"
+                              >
+                                Title
+                              </Label>
+                              <Input
+                                id="title"
+                                placeholder="Title"
+                                className="col-span-3"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label
+                                htmlFor="description"
+                                className="text-right text-gray-400"
+                              >
+                                Description
+                              </Label>
+                              <Textarea
+                                id="description"
+                                placeholder="Description"
+                                className="col-span-3"
+                              />
+                            </div>
+                          </div>{" "}
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label
+                              htmlFor="title"
+                              className="text-right text-gray-400"
+                            >
+                              Subject
+                            </Label>
+                            {/*? cache subjects in storage */}
+                            <Select>
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Select Subject" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {subjects.map((subject) => (
+                                  <SelectItem value={subject.subject_uuid}>
+                                    {subject.subject}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </div>
               </div>
             </>
