@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, ChangeEvent } from "react";
 import { GlobalContext } from "../../app/context/GlobalContext";
 import PublicLayout from "../PublicLayout";
 import { PacmanLoader } from "react-spinners";
@@ -26,6 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "../ui/button";
+import { buttonVariants } from "@/components/ui/button";
 
 interface Assignment {
   title: string;
@@ -36,11 +38,23 @@ interface Subject {
   subject: string;
   subject_uuid: string;
 }
+interface AssignmentFields {
+  title: string;
+  description: string;
+  link: string;
+  subject: string;
+}
 
 const Assignments = () => {
   const [loading, setLoading] = useState(false);
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [link, setLink] = useState("");
+  const [subject, setSubject] = useState("");
+
+  const [content, setContent] = useState<File | null>(null);
 
   const getSubjects = async () => {
     const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/get-subjects`;
@@ -70,6 +84,39 @@ const Assignments = () => {
     getSubjects();
   }, []);
 
+  const handleAddAssignment = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    console.log(content);
+
+    const formData = new FormData();
+    formData.append("title", title);
+
+    if (description.trim() !== "") {
+      formData.append("description", description);
+    }
+
+    if (link.trim() !== "") {
+      formData.append("link", link);
+    }
+
+    formData.append("subject", subject);
+
+    if (content !== null && content !== undefined) {
+      formData.append("content", content, content.name);
+    }
+    try {
+      console.log(formData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   setContent(file || null);
+  // };
   return (
     <div className="h-screen bg-primary overflow-auto">
       <PublicLayout>
@@ -122,60 +169,108 @@ const Assignments = () => {
                         </div>
                       </DialogTrigger>
                       <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle className="text-4xl font-light font-base">
-                            Add Assignment
-                          </DialogTitle>
-                          <div className="grid gap-4 py-4">
+                        <form
+                          action=""
+                          className="flex flex-col space-y-5"
+                          onSubmit={handleAddAssignment}
+                        >
+                          <DialogHeader>
+                            <DialogTitle className="text-4xl font-light font-base p-3">
+                              Add Assignment
+                            </DialogTitle>
+                            <div className="grid gap-4 py-4">
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label
+                                  htmlFor="title"
+                                  className="text-right text-gray-400"
+                                >
+                                  Title
+                                </Label>
+                                <Input
+                                  required
+                                  id="title"
+                                  onChange={(e) => setTitle(e.target.value)}
+                                  placeholder="Title"
+                                  className="col-span-3"
+                                />
+                              </div>
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label
+                                  htmlFor="description"
+                                  className="text-right text-gray-400"
+                                >
+                                  Description
+                                </Label>
+                                <Textarea
+                                  onChange={(e) =>
+                                    setDescription(e.target.value)
+                                  }
+                                  id="description"
+                                  placeholder="Description"
+                                  className="col-span-3"
+                                />
+                              </div>
+                            </div>{" "}
                             <div className="grid grid-cols-4 items-center gap-4">
                               <Label
                                 htmlFor="title"
                                 className="text-right text-gray-400"
                               >
-                                Title
+                                Subject
                               </Label>
-                              <Input
-                                id="title"
-                                placeholder="Title"
-                                className="col-span-3"
-                              />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                              <Label
-                                htmlFor="description"
-                                className="text-right text-gray-400"
+                              {/*? cache subjects in storage */}
+                              <Select
+                                required
+                                onValueChange={(value) => setSubject(value)}
                               >
-                                Description
-                              </Label>
-                              <Textarea
-                                id="description"
-                                placeholder="Description"
-                                className="col-span-3"
-                              />
+                                <SelectTrigger className="w-[180px]">
+                                  <SelectValue placeholder="Select Subject" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {subjects.map((subject) => (
+                                    <SelectItem value={subject.subject_uuid}>
+                                      {subject.subject}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
                             </div>
-                          </div>{" "}
+                          </DialogHeader>
                           <div className="grid grid-cols-4 items-center gap-4">
                             <Label
-                              htmlFor="title"
+                              htmlFor="link"
                               className="text-right text-gray-400"
                             >
-                              Subject
+                              Link
                             </Label>
-                            {/*? cache subjects in storage */}
-                            <Select>
-                              <SelectTrigger className="w-[180px]">
-                                <SelectValue placeholder="Select Subject" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {subjects.map((subject) => (
-                                  <SelectItem value={subject.subject_uuid}>
-                                    {subject.subject}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
+                            <Input
+                              value={link}
+                              onChange={(e) => setLink(e.target.value)}
+                              id="link"
+                              placeholder="Link to source"
+                              className="col-span-3"
+                            />
                           </div>
-                        </DialogHeader>
+                          <div className="grid w-full max-w-md gap-4">
+                            <Label htmlFor="content" className="text-gray-400">
+                              Assignment Pdf
+                            </Label>
+                            <Input
+                              id="content"
+                              type="file"
+                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setContent(e.target.files?.[0] || null)
+                              }
+                            />
+                          </div>
+                          {/* get criticism */}
+                          <Button
+                            type="submit"
+                            className={buttonVariants({ variant: "kaizen" })}
+                          >
+                            Add Assignment
+                          </Button>
+                        </form>
                       </DialogContent>
                     </Dialog>
                   )}
