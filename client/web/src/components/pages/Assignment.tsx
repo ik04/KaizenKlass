@@ -7,12 +7,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { PacmanLoader } from "react-spinners";
 import { GlobalContext } from "@/app/context/GlobalContext";
+import toast from "react-hot-toast";
 
 interface Solution {
   description: string;
   content: string;
   username: string;
   user_uuid: string;
+  solution_uuid: string;
 }
 
 const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
@@ -76,6 +78,32 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
       console.log(error);
     }
   };
+
+  const deleteOwnSolution = async (solutionUuid: string) => {
+    const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/delete-own-solution/${solutionUuid}`;
+    const resp = await axios.delete(url, { withCredentials: true });
+    console.log(resp);
+    setSolutions((prevSolutions) =>
+      prevSolutions.filter(
+        (solution) => solution.solution_uuid !== solutionUuid
+      )
+    );
+    toast.success("Solution Deleted!");
+  };
+
+  const deleteSolution = async (solutionUuid: string) => {
+    if (!(role === 1 || role === 2)) {
+      toast.error("That Action is unauthorized");
+    }
+    const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/delete-solution/${solutionUuid}`;
+    const resp = await axios.delete(url, { withCredentials: true });
+    setSolutions((prevSolutions) =>
+      prevSolutions.filter(
+        (solution) => solution.solution_uuid !== solutionUuid
+      )
+    );
+    toast.success("Solution Deleted!");
+  };
   return (
     <div className="h-screen bg-primary overflow-auto">
       <PublicLayout>
@@ -98,11 +126,11 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                 <div className="description-section flex justify-center">
                   <div className="w-[88%] bg-primary-complement p-3 flex flex-col">
                     <div className="w-full flex justify-between">
-                      <h1 className="text-custom-blue font-base text-2xl mb-1">
+                      <h1 className="text-custom-blue font-base text-3xl mb-1">
                         Decription:
                       </h1>
                       {isAuthenticated && role === 2 && (
-                        // todo: add are yousure modal
+                        // todo: add are you sure modal
                         <Image
                           onClick={deleteAssignment}
                           alt="delete"
@@ -160,9 +188,39 @@ const Assignment = ({ assignmentUuid }: { assignmentUuid: string }) => {
                             Decription:
                           </h1>
                           <div className="flex space-x-4">
-                            <p className="text-custom-blue font-base text-2xl font-light posted-by">
-                              Posted by: {solution.username}
-                            </p>
+                            {userUuid != solution.user_uuid ? (
+                              <p className="text-custom-blue font-base text-2xl font-light posted-by">
+                                Posted by: {solution.username}
+                              </p>
+                            ) : (
+                              <>
+                                {" "}
+                                <Image
+                                  onClick={() =>
+                                    deleteOwnSolution(solution.solution_uuid)
+                                  }
+                                  alt="delete"
+                                  src={"/assets/blueBin.png"}
+                                  height={40}
+                                  width={40}
+                                />
+                              </>
+                            )}
+                            {((userUuid != solution.user_uuid && role === 2) ||
+                              role === 1) && (
+                              <>
+                                {" "}
+                                <Image
+                                  onClick={() =>
+                                    deleteOwnSolution(solution.solution_uuid)
+                                  }
+                                  alt="delete"
+                                  src={"/assets/redBin.png"}
+                                  height={40}
+                                  width={40}
+                                />
+                              </>
+                            )}
                           </div>
                         </div>
                         {solution.description != null &&

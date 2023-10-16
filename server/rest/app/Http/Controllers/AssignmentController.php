@@ -242,14 +242,13 @@ public function getSolutionsByAssignment(Request $request, $assignmentUuid)
 
         if (!empty($solution->content)) {
             $contentPath = public_path($solution->content);
-
             if (File::exists($contentPath)) {
                 $fileContent = file_get_contents($contentPath);
                 $content = base64_encode($fileContent);
             }
         }
 
-        $user = User::select("name")->where("id",$solution->user_id)->first();
+        $user = User::select("name","user_uuid")->where("id",$solution->user_id)->first();
         $username = $user->name;
         $userUuid = $user->user_uuid;
 

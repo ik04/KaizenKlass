@@ -1,4 +1,4 @@
-import Assignment from "@/app/components/pages/Assignment";
+import Assignment from "../../../components/pages/Assignment";
 import React from "react";
 
 const page = ({

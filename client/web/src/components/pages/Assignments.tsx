@@ -1,12 +1,19 @@
 "use client";
 import React, { useEffect, useState, useContext } from "react";
-import { GlobalContext } from "@/app/context/GlobalContext";
+import { GlobalContext } from "../../app/context/GlobalContext";
 import PublicLayout from "../PublicLayout";
 import { PacmanLoader } from "react-spinners";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 interface Assignment {
   title: string;
   assignment_uuid: string;
@@ -39,7 +46,6 @@ const Assignments = () => {
   return (
     <div className="h-screen bg-primary overflow-auto">
       <PublicLayout>
-        {" "}
         <div className="w-full h-full mt-10 flex flex-col">
           {!loading ? (
             <>
@@ -71,6 +77,33 @@ const Assignments = () => {
                       </div>
                     </Link>
                   ))}
+                  <Dialog>
+                    <DialogTrigger>
+                      <div className="cursor-pointer h-[180px] bg-primary-complement text-custom-blue px-5 rounded-[20px] flex flex-col justify-center my-3 hover:text-white duration-300 transition-all">
+                        <div className="flex space-x-4 items-center w-full ">
+                          <h2 className="font-base text-[40px] font-light">
+                            Add New Assignment
+                          </h2>
+                          <Image
+                            src={"/assets/addButton.png"}
+                            alt="arrow"
+                            width={50}
+                            height={50}
+                          />
+                        </div>
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Add Assignment</DialogTitle>
+                        <DialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
                 </div>
               </div>
             </>

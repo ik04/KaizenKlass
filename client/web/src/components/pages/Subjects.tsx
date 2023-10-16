@@ -1,7 +1,7 @@
 "use client";
 import PublicLayout from "../PublicLayout";
 import { SubjectCard } from "../SubjectCard";
-import { GlobalContext } from "../../context/GlobalContext";
+import { GlobalContext } from "../../app/context/GlobalContext";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { PacmanLoader } from "react-spinners";

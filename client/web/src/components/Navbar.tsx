@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GlobalContext } from "../context/GlobalContext";
+import { GlobalContext } from "../app/context/GlobalContext";
 import Link from "next/link";
 import React, { useContext } from "react";
 import toast from "react-hot-toast";

@@ -1,9 +1,9 @@
 "use client";
 import React, { useContext } from "react";
 import { Navbar } from "../Navbar";
-import { GlobalContext } from "../../context/GlobalContext";
+import { GlobalContext } from "../../app/context/GlobalContext";
 import Image from "next/image";
-import HeroSvg from "../../../../public/assets/heroimg.svg";
+import HeroSvg from "../../../public/assets/heroimg.svg";
 import Link from "next/link";
 
 const Landing = () => {

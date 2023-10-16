@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { Navbar } from "./Navbar";
-import Book from "../../../public/assets/auto_stories.svg";
-import Test from "../../../public/assets/contract.svg";
-import Past from "../../../public/assets/article.svg";
+import Book from "../../public/assets/auto_stories.svg";
+import Test from "../../public/assets/contract.svg";
+import Past from "../../public/assets/article.svg";
 import Image from "next/image";
-import { GlobalContext } from "../context/GlobalContext";
+import { GlobalContext } from "../app/context/GlobalContext";
 import Link from "next/link";
 import axios from "axios";
 import toast from "react-hot-toast";

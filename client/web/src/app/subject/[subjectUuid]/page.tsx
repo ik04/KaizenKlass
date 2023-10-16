@@ -1,4 +1,4 @@
-import Subject from "@/app/components/pages/Subject";
+import Subject from "../../../components/pages/Subject";
 import React from "react";
 
 const page = ({

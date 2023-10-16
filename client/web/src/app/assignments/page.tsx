@@ -1,5 +1,5 @@
 import React from "react";
-import Assignments from "../components/pages/Assignments";
+import Assignments from "../../components/pages/Assignments";
 
 const page = () => {
   return (

@@ -1,5 +1,5 @@
 import React from "react";
-import Subjects from "../components/pages/Subjects";
+import Subjects from "../../components/pages/Subjects";
 
 const page = () => {
   return (
