@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/select";
 import { Button } from "../ui/button";
 import { buttonVariants } from "@/components/ui/button";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface Assignment {
   title: string;
@@ -53,8 +55,9 @@ const Assignments = () => {
   const [description, setDescription] = useState("");
   const [link, setLink] = useState("");
   const [subject, setSubject] = useState("");
-
   const [content, setContent] = useState<File | null>(null);
+
+  const router = useRouter();
 
   const getSubjects = async () => {
     const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/get-subjects`;
@@ -95,19 +98,27 @@ const Assignments = () => {
 
     if (description.trim() !== "") {
       formData.append("description", description);
+    } else {
+      formData.append("description", "");
     }
 
     if (link.trim() !== "") {
       formData.append("link", link);
+    } else {
+      formData.append("link", "");
     }
 
-    formData.append("subject", subject);
+    formData.append("subject_uuid", subject);
 
     if (content !== null && content !== undefined) {
       formData.append("content", content, content.name);
     }
     try {
-      console.log(formData);
+      const url = `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/api/v1/add-assignment`;
+      const resp = await axios.post(url, formData, { withCredentials: true });
+      console.log(resp);
+      toast.success("Assignment Added!");
+      router.refresh();
     } catch (error) {
       console.error(error);
     }

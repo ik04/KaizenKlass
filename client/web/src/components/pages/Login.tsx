@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Navbar } from "../Navbar";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
 const Login = () => {
@@ -23,8 +23,29 @@ const Login = () => {
       } else {
         toast.error("Please fill in all details");
       }
-    } catch (error) {
-      console.log(error);
+      // ! issue: find the correct type
+    } catch (error: any) {
+      console.log(error.response.data);
+
+      if (Array.isArray(error.response.data)) {
+        error.response.data.forEach((errorMsg: any) => {
+          toast.error(errorMsg);
+        });
+      } else if (
+        error.response.data &&
+        Array.isArray(error.response.data.error)
+      ) {
+        error.response.data.error.forEach((errorMsg: any) => {
+          toast.error(errorMsg);
+        });
+      } else if (
+        error.response.data &&
+        typeof error.response.data.error === "string"
+      ) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
     }
   };
   return (
