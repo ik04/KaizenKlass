@@ -5,6 +5,7 @@ import { GlobalContext } from "../../app/context/GlobalContext";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { PacmanLoader } from "react-spinners";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface Subject {
   subject: string;
@@ -35,13 +36,20 @@ const Subjects = () => {
           <>
             <div className="grid grid-cols-4 w-full h-full mt-10">
               {subjects.map((subject, index) => (
-                <div className="m-2">
-                  <SubjectCard
-                    subject={subject.subject}
-                    subjectUuid={subject.subject_uuid}
-                    key={index}
-                  />
-                </div>
+                <AnimatePresence>
+                  <motion.div
+                    initial={{ opacity: 0, rotate: 20 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0 }}
+                    className="m-2"
+                  >
+                    <SubjectCard
+                      subject={subject.subject}
+                      subjectUuid={subject.subject_uuid}
+                      key={index}
+                    />
+                  </motion.div>
+                </AnimatePresence>
               ))}
             </div>
           </>

@@ -118,7 +118,7 @@ const Assignments = () => {
       const resp = await axios.post(url, formData, { withCredentials: true });
       console.log(resp);
       toast.success("Assignment Added!");
-      router.refresh();
+      location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -142,23 +142,22 @@ const Assignments = () => {
                 </div>
                 <div className="flex flex-col justify-between">
                   {assignments.map((assignment) => (
-                    <Link
-                      href={`/assignment/${assignment.assignment_uuid}`}
-                      className="h-[180px] bg-primary-complement text-custom-blue px-5 rounded-[20px] flex flex-col justify-center my-3 hover:text-white duration-300 transition-all"
-                    >
-                      <div className="flex justify-between items-center w-full ">
-                        <h2 className="font-base text-[40px] font-light">
-                          {assignment.title}
-                        </h2>
-                        <Image
-                          src={"/assets/blueRightArrow.png"}
-                          alt="arrow"
-                          width={65}
-                          height={65}
-                        />
-                      </div>
-                      <div className="font-base text-gray-400 text-2xl">
-                        {assignment.subject}
+                    <Link href={`/assignment/${assignment.assignment_uuid}`}>
+                      <div className="h-[180px] bg-primary-complement text-custom-blue px-5 rounded-[20px] flex flex-col justify-center my-3 hover:text-white duration-300 transition-all">
+                        <div className="flex justify-between items-center w-full ">
+                          <h2 className="font-base text-[40px] font-light">
+                            {assignment.title}
+                          </h2>
+                          <Image
+                            src={"/assets/blueRightArrow.png"}
+                            alt="arrow"
+                            width={65}
+                            height={65}
+                          />
+                        </div>
+                        <div className="font-base text-gray-400 text-2xl">
+                          {assignment.subject}
+                        </div>
                       </div>
                     </Link>
                   ))}
